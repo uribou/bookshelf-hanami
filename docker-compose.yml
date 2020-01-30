@@ -1,0 +1,25 @@
+version: '3'
+services:
+  app:
+    build: .
+    container_name: "bookshelf"
+    ports:
+      - "2300:2300"
+    command: bundle exec hanami server --host 0.0.0.0
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
+
+  db:
+    image: mysql:5.7
+    container_name: "mysql"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
+volumes:
+  mysql-data:
