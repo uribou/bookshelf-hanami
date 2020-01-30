@@ -1,21 +1,9 @@
-FROM ruby:2.7.0-alpine
+FROM ruby:2.7.0
 
 ARG APP_ROOT=/home/bookself
-WORKDIR $APP_ROOT
+WORKDIR /home/bookself
 
-RUN apk update && \
-    apk add \
-      build-base \
-      curl-dev \
-      libxml2-dev \
-      libxslt-dev \
-      linux-headers \
-      mysql-dev \
-      nodejs \
-      ruby-dev \
-      tzdata \
-      yaml \
-      yaml-dev
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs default-mysql-client
 
 COPY . $APP_ROOT
 
