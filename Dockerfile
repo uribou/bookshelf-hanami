@@ -1,4 +1,4 @@
-FROM ruby:2.7.0
+FROM ruby:2.6.3
 
 ARG APP_ROOT=/home/bookself
 WORKDIR /home/bookself

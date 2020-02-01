@@ -13,13 +13,17 @@ module Web
           end
         end
 
+        def initialize(interactor: AddBook.new)
+          @interactor = interactor
+        end
+
         def call(params)
           if !params.valid?
             self.status = 422
             return
           end
 
-          BookRepository.new.create(params[:book])
+          @interactor.call(params[:book])
 
           redirect_to routes.books_path
         end

@@ -1,19 +1,13 @@
 RSpec.describe Web::Controllers::Books::Create do
-  let(:action) { described_class.new }
-  let(:repository) { BookRepository.new }
-
-  before do
-    repository.clear
-  end
+  let(:interactor) { instance_double('AddBook', call: nil) }
+  let(:action) { described_class.new(interactor: interactor) }
 
   context 'with valid params' do
     let(:params) { Hash[book: { title: 'Confident Ruby', author: 'Avdi Grimm' }] }
 
-    it 'creates a new book' do
+    it 'called interactor' do
+      expect(interactor).to receive(:call)
       action.call(params)
-      book = repository.last
-
-      expect(book.id).to_not be_nil
     end
 
     it 'redirects the user to the books listing' do
@@ -27,7 +21,12 @@ RSpec.describe Web::Controllers::Books::Create do
   context 'with invalid params' do
     let(:params) { Hash[book: {}] }
 
-    it 'return HTTP client error' do
+    it 'does not call interactor' do
+      expect(interactor).to_not receive(:call)
+      action.call(params)
+    end
+
+    it 're-renders the books#new view' do
       res = action.call(params)
       expect(res[0]).to eq(422)
     end
